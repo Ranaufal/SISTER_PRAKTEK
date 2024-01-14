@@ -57,7 +57,7 @@ public class ChatServer {
 
                 String message;
                 while ((message = in.readLine()) != null) {
-                    System.out.println("Received: " + message);
+                    System.out.println("From client : "+message);
                     broadcastMessage(message);
                 }
             } catch (IOException e) {

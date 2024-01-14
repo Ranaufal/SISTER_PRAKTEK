@@ -43,6 +43,7 @@ public class MulticastChatClient {
 
                         String message = new String(packet.getData(), 0, packet.getLength());
                         System.out.println(message);
+                        System.out.println("123123");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -10,15 +10,18 @@ import java.util.Scanner;
 public class ChatClient {
     private static final int server_port = 12345;
     private static final String server_address = "localhost";
+    public static final String ANSI_GREEN = "\033[0m";
 
     public static void main(String[] args) {
         
         
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Masukkan Nama Anda : ");
+        System.out.printf("Masukkan Nama Anda : ");
         String username = scanner.nextLine();
         try (Socket socket = new Socket(server_address, server_port)) {
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);            
+//            PrintWriter usernameOut = new PrintWriter(socket.getOutputStream(), true);
+
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             System.out.println("Connect ke server, silahkan kirim pesan(exit untuk Keluar)");
 
@@ -26,11 +29,13 @@ public class ChatClient {
 
             String message;
             while (true) {
-                System.out.print(username + " : ");
+//                System.out.print(username + " : ");
+//                scanner.nextLine();
                 message = scanner.nextLine();
-                message = username + " : " + message;
+//                message = username + " : " + message;
 
-                out.println(message);
+                out.println(enkrip(message));
+//                usernameOut.println(username);
                 if (message.equalsIgnoreCase("exit")) {
                     break;
                 }
@@ -55,7 +60,7 @@ public class ChatClient {
         public void run() {
             try {
                 while ((message = in.readLine()) != null) {
-                    System.out.println(message);
+                    System.out.println("From Server : "+enkrip(message));
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -63,4 +68,18 @@ public class ChatClient {
         }
 
     }
+    
+    public static String enkrip(String text){
+        String hasilEnkrip = "";
+        
+        int key = 2;
+        for(int i=0; i<text.length();i++){
+            int h = (int) (text.charAt(i));
+            char t = (char) (h ^ key);
+            hasilEnkrip += t;
+        }
+        
+        return hasilEnkrip;
+    }
+    
 }
